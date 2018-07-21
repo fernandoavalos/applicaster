@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0EA99FD921036D330042D700 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EA99FD821036D330042D700 /* PlayerViewController.swift */; };
+		0EA99FDD210377BE0042D700 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 0EA99FDC210377BD0042D700 /* Assets */; };
+		0EA99FE1210377FA0042D700 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EA99FDF210377FA0042D700 /* YTPlayerView.m */; };
 		0EFEF01D21017F11006DC4FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EFEF01C21017F11006DC4FF /* AppDelegate.swift */; };
 		0EFEF01F21017F11006DC4FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EFEF01E21017F11006DC4FF /* ViewController.swift */; };
 		0EFEF02221017F11006DC4FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EFEF02021017F11006DC4FF /* Main.storyboard */; };
@@ -34,6 +37,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0EA99FD821036D330042D700 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = ../../../../Downloads/YTDemo/YTDemo/PlayerViewController.swift; sourceTree = "<group>"; };
+		0EA99FDC210377BD0042D700 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
+		0EA99FDE210377F90042D700 /* Applicaster-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Applicaster-Bridging-Header.h"; sourceTree = "<group>"; };
+		0EA99FDF210377FA0042D700 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
+		0EA99FE0210377FA0042D700 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPlayerView.h; sourceTree = "<group>"; };
 		0EFEF01921017F11006DC4FF /* Applicaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Applicaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EFEF01C21017F11006DC4FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0EFEF01E21017F11006DC4FF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +89,10 @@
 				0EFEF03021017F13006DC4FF /* ApplicasterTests */,
 				0EFEF03B21017F13006DC4FF /* ApplicasterUITests */,
 				0EFEF01A21017F11006DC4FF /* Products */,
+				0EA99FE0210377FA0042D700 /* YTPlayerView.h */,
+				0EA99FDF210377FA0042D700 /* YTPlayerView.m */,
+				0EA99FDC210377BD0042D700 /* Assets */,
+				0EA99FDE210377F90042D700 /* Applicaster-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +111,7 @@
 			children = (
 				0EFEF01C21017F11006DC4FF /* AppDelegate.swift */,
 				0EFEF01E21017F11006DC4FF /* ViewController.swift */,
+				0EA99FD821036D330042D700 /* PlayerViewController.swift */,
 				0EFEF02021017F11006DC4FF /* Main.storyboard */,
 				0EFEF02321017F13006DC4FF /* Assets.xcassets */,
 				0EFEF02521017F13006DC4FF /* LaunchScreen.storyboard */,
@@ -193,6 +206,7 @@
 				TargetAttributes = {
 					0EFEF01821017F11006DC4FF = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 0940;
 					};
 					0EFEF02C21017F13006DC4FF = {
 						CreatedOnToolsVersion = 9.4.1;
@@ -230,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0EFEF02721017F13006DC4FF /* LaunchScreen.storyboard in Resources */,
+				0EA99FDD210377BE0042D700 /* Assets in Resources */,
 				0EFEF02421017F13006DC4FF /* Assets.xcassets in Resources */,
 				0EFEF02221017F11006DC4FF /* Main.storyboard in Resources */,
 			);
@@ -258,6 +273,8 @@
 			files = (
 				0EFEF01F21017F11006DC4FF /* ViewController.swift in Sources */,
 				0EFEF01D21017F11006DC4FF /* AppDelegate.swift in Sources */,
+				0EA99FE1210377FA0042D700 /* YTPlayerView.m in Sources */,
+				0EA99FD921036D330042D700 /* PlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GHUURVC989;
 				INFOPLIST_FILE = Applicaster/Info.plist;
@@ -439,6 +457,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Fernando-Avalos.Applicaster";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Applicaster-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -448,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GHUURVC989;
 				INFOPLIST_FILE = Applicaster/Info.plist;
@@ -457,6 +478,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Fernando-Avalos.Applicaster";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Applicaster-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
