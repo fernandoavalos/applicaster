@@ -47,12 +47,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // MARK: UITableView method implementation
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if segDisplayedContent.selectedSegmentIndex == 0 {
+            return channelsDataArray.count
+        }
+        else {
+            
+        }
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell()
-        
+        var cell: UITableViewCell = UITableViewCell()
+        if segDisplayedContent.selectedSegmentIndex == 0 {
+            
+            cell = tableView.dequeueReusableCell(withIdentifier: "idCellChannel", for: indexPath) as! UITableViewCell
+            
+            let channelTitleLabel = cell.viewWithTag(10) as! UILabel
+            let channelDescriptionLabel = cell.viewWithTag(11) as! UILabel
+            let thumbnailImageView = cell.viewWithTag(12) as! UIImageView
+            
+            let channelDetails = channelsDataArray[indexPath.row]
+            channelTitleLabel.text = channelDetails["title"] as? String
+            channelDescriptionLabel.text = channelDetails["description"] as? String
+            thumbnailImageView.image = UIImage(data: ((NSData(contentsOf: URL(string: (channelDetails["thumbnail"] as? String)!)!)) as Data?)!)
+        }
+        else {
+            cell = tableView.dequeueReusableCell(withIdentifier: "idCellVideo", for: indexPath) as! UITableViewCell
+        }
         return cell
     }
     
