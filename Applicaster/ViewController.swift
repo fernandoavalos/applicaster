@@ -28,6 +28,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tblVideos.delegate = self
         tblVideos.dataSource = self
         txtSearch.delegate = self
+        
+        getChannelDetails(useChannelIDParam: false)
+        
     }
 
     override func didReceiveMemoryWarning() {
