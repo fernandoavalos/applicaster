@@ -89,7 +89,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="1b3-Ni-Ex8" kind="show" trigger="accessoryAction" id="okC-Pb-6fJ"/>
+                                            <segue destination="1b3-Ni-Ex8" kind="show" identifier="idSeguePlayer" trigger="accessoryAction" id="okC-Pb-6fJ"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idCellVideo" rowHeight="120" id="kgU-en-oFr">
