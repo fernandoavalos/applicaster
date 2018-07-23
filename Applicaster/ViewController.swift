@@ -19,6 +19,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var channelIndex = 0
     var channelsDataArray: Array<Dictionary<String, AnyObject>> = []
     var videosArray: Array<Dictionary<String, AnyObject>> = []
+    var videosDurationDict: Dictionary<String, String> = [:]
     var selectedVideoIndex: Int!
     
     override func viewDidLoad() {
@@ -59,14 +60,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         else {
             return videosArray.count
         }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell = UITableViewCell()
         if segDisplayedContent.selectedSegmentIndex == 0 {
             
-            cell = tableView.dequeueReusableCell(withIdentifier: "idCellChannel", for: indexPath) as! UITableViewCell
+            cell = tableView.dequeueReusableCell(withIdentifier: "idCellChannel", for: indexPath)
             
             let channelTitleLabel = cell.viewWithTag(10) as! UILabel
             let channelDescriptionLabel = cell.viewWithTag(11) as! UILabel
@@ -78,7 +78,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             thumbnailImageView.image = UIImage(data: ((NSData(contentsOf: URL(string: (channelDetails["thumbnail"] as? String)!)!)) as Data?)!)
         }
         else {
-            cell = tableView.dequeueReusableCell(withIdentifier: "idCellVideo", for: indexPath) as! UITableViewCell
+            cell = tableView.dequeueReusableCell(withIdentifier: "idCellVideo", for: indexPath)
             
             let videoTitle = cell.viewWithTag(10) as! UILabel
             let videoThumbnail = cell.viewWithTag(11) as! UIImageView
@@ -131,7 +131,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         
         //Format url target
-        var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=\(textField.text)&type=\(type)&key=\(apiKey)"
+        var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&order=rating&q=\(String(describing: textField.text))&type=\(type)&key=\(apiKey)"
         urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         let targetURL = URL(string: urlString)
@@ -250,7 +250,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func getVideosForChannelAt(index: Int!) {
         // Get the selected channel's playlistID value from the channelsDataArray array and use it for fetching the proper video playlst.
         let playlistID = channelsDataArray[index]["playlistID"] as! String
-        let urlString = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=\(playlistID)&key=\(apiKey)"
+        let urlString = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=\(playlistID)&key=\(apiKey)"
         let targetURL = URL(string: urlString)
         
         doGetRequest(targetURL: targetURL) { (data, HTTPStatusCode, error) in
@@ -266,11 +266,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     var desiredPlaylistItemDataDict = Dictionary<String, AnyObject>()
                     desiredPlaylistItemDataDict["title"] = playlistSnippetDict["title"]
                     desiredPlaylistItemDataDict["thumbnail"] = ((playlistSnippetDict["thumbnails"] as! Dictionary<String, AnyObject>)["default"] as! Dictionary<String, AnyObject>)["url"]
+                    desiredPlaylistItemDataDict["publishedDate"] = playlistSnippetDict["publishedAt"]
+                    desiredPlaylistItemDataDict["playlistTitle"] = playlistSnippetDict["channelTitle"]
                     desiredPlaylistItemDataDict["videoID"] = (playlistSnippetDict["resourceId"] as! Dictionary<String, AnyObject>)["videoId"]
                     
                     self.videosArray.append(desiredPlaylistItemDataDict)
                     self.tblVideos.reloadData()
                 }//for
+                self.getDurationOf(videosArray: self.videosArray)
                 
                 self.viewWait.isHidden = true
                 
@@ -283,5 +286,59 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }//catch
         }//doGetRequest
     }//getVideosForChannelAt
+    
+    func getDurationOf(videosArray: Array<Dictionary<String, AnyObject>>) {
+        //Order videoIDs into string separated by commas
+        var videoIDsString = ""
+        
+        for video  in videosArray {
+            videoIDsString += "\(String(describing: video["videoID"])),"
+        }
+        
+        let urlString = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&maxResults=10&id=\(videoIDsString)&key=\(apiKey)"
+        let targetURL = URL(string: urlString)
+        
+        doGetRequest(targetURL: targetURL) { (data, HTTPStatusCode, error) in
+            //Parse Data, cast data to dictionary
+            do {
+                let dictionary = try JSONSerialization.jsonObject(with: data!, options: [])
+                    as! Dictionary<String, AnyObject>
+                let itemsArray: Array<Dictionary<String, AnyObject>> = dictionary["items"] as! Array<Dictionary<String, AnyObject>>
+                
+                for item in itemsArray {
+                    
+                    let videoContentDetailDict = (item as Dictionary<String, AnyObject>)["contentDetails"] as! Dictionary<String, AnyObject>
+                    var duration = videoContentDetailDict["duration"] as! String
+                    duration = self.getYoutubeFormattedDurationFrom(duration)
+                    
+                    self.videosDurationDict[item["id"] as! String] = duration
+                }//for
+            }//do
+                
+            catch{
+                print("HTTP Status Code = \(HTTPStatusCode)")
+                print("Error while loading channel details: \(error)")
+                return
+            }//catch
+        }//doGetRequest
+    }//getDurationOf
+    
+    
+    func getYoutubeFormattedDurationFrom(_ string: String) -> String {
+        
+        let formattedDuration = string.replacingOccurrences(of: "PT", with: "").replacingOccurrences(of: "H", with:":").replacingOccurrences(of: "M", with: ":").replacingOccurrences(of: "S", with: "")
+        
+        let components = formattedDuration.components(separatedBy: ":")
+        var duration = ""
+        for component in components {
+            duration = duration.count > 0 ? duration + ":" : duration
+            if component.count < 2 {
+                duration += "0" + component
+                continue
+            }
+            duration += component
+        }
+        return duration
+    }//getYoutubeFormattedDurationFrom
 }
 
