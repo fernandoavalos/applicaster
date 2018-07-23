@@ -1,9 +1,9 @@
 //
-//  PlayerViewController.swift
-//  YTDemo
+//  ViewController.swift
+//  Applicaster
 //
-//  Created by Gabriel Theodoropoulos on 27/6/15.
-//  Copyright (c) 2015 Appcoda. All rights reserved.
+//  Created by Fernando Avalos on 7/19/18.
+//  Copyright © 2018 Fernando Avalos. All rights reserved.
 //
 
 import UIKit
@@ -12,10 +12,11 @@ class PlayerViewController: UIViewController {
 
     @IBOutlet weak var playerView: YTPlayerView!
     
+    var videoID: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        playerView.load(withVideoId: videoID)
     }
 
     override func didReceiveMemoryWarning() {
