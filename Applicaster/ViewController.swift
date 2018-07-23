@@ -292,7 +292,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var videoIDsString = ""
         
         for video  in videosArray {
-            videoIDsString += "\(String(describing: video["videoID"])),"
+            videoIDsString += "\(video["videoID"] as! String),"
         }
         
         let urlString = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&maxResults=10&id=\(videoIDsString)&key=\(apiKey)"
@@ -334,6 +334,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             duration = duration.count > 0 ? duration + ":" : duration
             if component.count < 2 {
                 duration += "0" + component
+                continue
+            } else if component.count == 2 {
+                duration += "00:" + component
                 continue
             }
             duration += component
