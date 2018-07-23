@@ -10,12 +10,12 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     @IBOutlet weak var tblVideos: UITableView!
-    @IBOutlet weak var viewWait: UIView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var segDisplayedContent: UISegmentedControl!
     @IBOutlet weak var txtSearch: UITextField!
     
     var apiKey = "AIzaSyDwqLGuJfQuBkcGvOuLubofMpRZNIyu_Ng"
-    var desiredChannelsArray = ["Apple", "Google", "Microsoft"]
+    var desiredChannelsArray = ["YouTube"]
     var channelIndex = 0
     var channelsDataArray: Array<Dictionary<String, AnyObject>> = []
     var videosArray: Array<Dictionary<String, AnyObject>> = []
@@ -82,10 +82,25 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             let videoTitle = cell.viewWithTag(10) as! UILabel
             let videoThumbnail = cell.viewWithTag(11) as! UIImageView
+            let playlistTitle = cell.viewWithTag(12) as! UILabel
+            let publishedDate = cell.viewWithTag(13) as! UILabel
+            let videoDuration = cell.viewWithTag(14) as! UILabel
             
             let videoDetails = videosArray[indexPath.row]
+            let videoDurationString = videosDurationDict[videoDetails["videoID"] as! String]
+            
             videoTitle.text = videoDetails["title"] as? String
             videoThumbnail.image = UIImage(data: ((NSData(contentsOf: URL(string: (videoDetails["thumbnail"] as? String)!)!)) as Data?)!)
+            playlistTitle.text = videoDetails["playlistTitle"] as? String
+            
+            if let publishDateString = videoDetails["publishedDate"] as? String {
+                let tRange = publishDateString.range(of: "T")
+                var formattedString = publishDateString
+                formattedString.removeSubrange(tRange!.lowerBound..<formattedString.endIndex)
+                publishedDate.text = formattedString
+            }
+            
+            videoDuration.text = videoDurationString
         }
         return cell
     }
@@ -103,10 +118,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             segDisplayedContent.selectedSegmentIndex = 1
             
             // Show the activity indicator.
-            viewWait.isHidden = false
+            self.activityIndicator.startAnimating()
             
             // Remove all existing video details from the videosArray array.
             videosArray.removeAll(keepingCapacity: false)
+            videosDurationDict.removeAll(keepingCapacity: false)
             
             // Fetch the video details for the tapped channel.
             getVideosForChannelAt(index: indexPath.row)
@@ -122,16 +138,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        viewWait.isHidden = false
+        self.activityIndicator.startAnimating()
         
         var type = "channel"
         if segDisplayedContent.selectedSegmentIndex == 1 {
-            type = "video"
+            type = "video&maxResults=10"
             videosArray.removeAll(keepingCapacity: false)
+            videosDurationDict.removeAll(keepingCapacity: false)
         }
         
         //Format url target
-        var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&order=rating&q=\(String(describing: textField.text))&type=\(type)&key=\(apiKey)"
+        var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=\(String(describing: textField.text))&type=\(type)&key=\(apiKey)"
         urlString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
         let targetURL = URL(string: urlString)
@@ -155,17 +172,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                         videoDetailsDict["title"] = snippetDict["title"]
                         videoDetailsDict["thumbnail"] = ((snippetDict["thumbnails"] as! Dictionary<String, AnyObject>)["default"] as! Dictionary<String, AnyObject>)["url"]
                         videoDetailsDict["videoID"] = (item["id"] as! Dictionary<String, AnyObject>)["videoId"]
+                        videoDetailsDict["publishedDate"] = snippetDict["publishedAt"]
+                        videoDetailsDict["playlistTitle"] = snippetDict["channelTitle"]
                         
                         self.videosArray.append(videoDetailsDict)
-                        self.tblVideos.reloadData()
                     }
                 }//for
                 
+                
                 if self.segDisplayedContent.selectedSegmentIndex == 0 {
                     self.getChannelDetails(useChannelIDParam: true)
+                } else {
+                    self.getDurationOf(videosArray: self.videosArray)
                 }
                 
-                self.viewWait.isHidden = true
+                self.activityIndicator.stopAnimating()
                 
             }//do
                 
@@ -225,7 +246,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 desiredValuesDict["playlistID"] = ((firstItemDict["contentDetails"] as! Dictionary<String, AnyObject>)["relatedPlaylists"] as! Dictionary<String, AnyObject>)["uploads"]
                 
                 self.channelsDataArray.append(desiredValuesDict)
-                
                 self.tblVideos.reloadData()
                 
                 //check if ther's another channel to load
@@ -234,7 +254,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     self.getChannelDetails(useChannelIDParam: useChannelIDParam)
                 }
                 else {
-                    self.viewWait.isHidden = true
+                    self.activityIndicator.stopAnimating()
                 }
             }//do
             
@@ -271,11 +291,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     desiredPlaylistItemDataDict["videoID"] = (playlistSnippetDict["resourceId"] as! Dictionary<String, AnyObject>)["videoId"]
                     
                     self.videosArray.append(desiredPlaylistItemDataDict)
-                    self.tblVideos.reloadData()
                 }//for
                 self.getDurationOf(videosArray: self.videosArray)
-                
-                self.viewWait.isHidden = true
                 
             }//do
                 
@@ -312,7 +329,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     duration = self.getYoutubeFormattedDurationFrom(duration)
                     
                     self.videosDurationDict[item["id"] as! String] = duration
+                    
                 }//for
+                self.tblVideos.reloadData()
+                self.activityIndicator.stopAnimating()
             }//do
                 
             catch{
