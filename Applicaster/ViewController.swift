@@ -355,10 +355,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             if component.count < 2 {
                 duration += "0" + component
                 continue
-            } else if component.count == 2 {
-                duration += "00:" + component
-                continue
-            }
+            } //else if component.count == 2 {
+                //duration += "00:"
+            //}
             duration += component
         }
         return duration

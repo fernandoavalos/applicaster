@@ -15,7 +15,7 @@
 		0EFEF02221017F11006DC4FF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EFEF02021017F11006DC4FF /* Main.storyboard */; };
 		0EFEF02421017F13006DC4FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EFEF02321017F13006DC4FF /* Assets.xcassets */; };
 		0EFEF02721017F13006DC4FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0EFEF02521017F13006DC4FF /* LaunchScreen.storyboard */; };
-		0EFEF03221017F13006DC4FF /* ApplicasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EFEF03121017F13006DC4FF /* ApplicasterTests.swift */; };
+		0EFEF03221017F13006DC4FF /* viewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EFEF03121017F13006DC4FF /* viewControllerTests.swift */; };
 		0EFEF03D21017F13006DC4FF /* ApplicasterUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EFEF03C21017F13006DC4FF /* ApplicasterUITests.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,7 +50,7 @@
 		0EFEF02621017F13006DC4FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0EFEF02821017F13006DC4FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0EFEF02D21017F13006DC4FF /* ApplicasterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApplicasterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0EFEF03121017F13006DC4FF /* ApplicasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicasterTests.swift; sourceTree = "<group>"; };
+		0EFEF03121017F13006DC4FF /* viewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = viewControllerTests.swift; sourceTree = "<group>"; };
 		0EFEF03321017F13006DC4FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0EFEF03821017F13006DC4FF /* ApplicasterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ApplicasterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EFEF03C21017F13006DC4FF /* ApplicasterUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicasterUITests.swift; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 		0EFEF03021017F13006DC4FF /* ApplicasterTests */ = {
 			isa = PBXGroup;
 			children = (
-				0EFEF03121017F13006DC4FF /* ApplicasterTests.swift */,
+				0EFEF03121017F13006DC4FF /* viewControllerTests.swift */,
 				0EFEF03321017F13006DC4FF /* Info.plist */,
 			);
 			path = ApplicasterTests;
@@ -282,7 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0EFEF03221017F13006DC4FF /* ApplicasterTests.swift in Sources */,
+				0EFEF03221017F13006DC4FF /* viewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
